@@ -8,6 +8,33 @@ const postedVideoIds = new Set<string>();
 // Only post videos published after bot starts
 const botStartTime = new Date();
 
+// Test mode: post the latest video regardless of publish time
+export async function testPost(): Promise<void> {
+  console.log("🧪 Fetching latest video for test...");
+
+  try {
+    const videos = await getAllChannelVideos();
+    const latestVideo = videos[0]; // Already sorted by date
+
+    if (!latestVideo) {
+      console.log("❌ No videos found from any channel");
+      return;
+    }
+
+    console.log(`📹 Posting test video: "${latestVideo.title}" from ${latestVideo.channelTitle}`);
+
+    const message = await sendVideoEmbed(latestVideo);
+
+    if (message) {
+      console.log(`✅ Test post successful! Check your Discord channel.`);
+    } else {
+      console.log(`❌ Failed to post test video`);
+    }
+  } catch (error) {
+    console.error("❌ Test failed:", error);
+  }
+}
+
 export async function checkForNewVideos(): Promise<void> {
   console.log(`🔍 Checking for new videos at ${new Date().toLocaleString()}...`);
 
