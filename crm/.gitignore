@@ -1,0 +1,10 @@
+node_modules
+.next
+.env*.local
+*.tsbuildinfo
+agents/
+.agents/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.vercel

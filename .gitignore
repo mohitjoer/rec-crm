@@ -1,37 +1,47 @@
-# dependencies (bun install)
-node_modules
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
 
-# output
-out
-dist
-*.tgz
+# Testing
+coverage/
 
-# code coverage
-coverage
-*.lcov
-
-# logs
-logs
-_.log
-report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
-
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-
-# caches
-.eslintcache
-.cache
+# Next.js build output
+.next/
+out/
+build/
+dist/
 *.tsbuildinfo
 
-# IntelliJ based IDEs
-.idea
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
 
-# Finder (MacOS) folder config
+# Environment variables
+.env
+.env*.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS Files
 .DS_Store
+*.pem
 
-# Bot storage file (contains posted video IDs)
-posted-videos.json
+# Agent memory & skills
+agents/
+.agents/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.vercel

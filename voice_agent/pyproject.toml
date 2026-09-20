@@ -1,0 +1,18 @@
+[project]
+name = "recovra-voice-agent"
+version = "0.1.0"
+description = "Autonomous AI Collections Voice Agent Worker for Recovra"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "livekit-agents[openai,silero,deepgram]==1.8.2",
+    "livekit-plugins-groq==1.8.2",
+    "livekit-plugins-sarvam==1.8.2",
+    "python-dotenv>=1.0,<2",
+    "aiohttp>=3.10,<4",
+    "pydantic>=2.0,<3",
+    "livekit-plugins-cartesia==1.8.2",
+]
+
+[tool.uv]
+package = false

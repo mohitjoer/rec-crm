@@ -1,19 +1,11 @@
 {
-  "name": "social-bot",
-  "module": "index.ts",
-  "type": "module",
+  "name": "collection-crm-monorepo",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "bun run index.ts",
-    "dev": "bun --watch index.ts"
-  },
-  "dependencies": {
-    "discord.js": "^14.14.1"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
+    "dev": "npm --prefix crm run dev",
+    "build": "npm --prefix crm run build",
+    "start": "npm --prefix crm start",
+    "agent": "uv run --directory voice_agent python agent.py dev"
   }
 }

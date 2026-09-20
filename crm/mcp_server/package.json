@@ -1,0 +1,19 @@
+{
+  "name": "recovra-crm-mcp",
+  "version": "1.0.0",
+  "description": "Model Context Protocol (MCP) Server for Recovra Debt Collection CRM",
+  "main": "server.js",
+  "bin": {
+    "recovra-crm-mcp": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "dotenv": "^16.4.7",
+    "mongodb": "^6.14.2"
+  },
+  "keywords": ["mcp", "crm", "collection", "voice-agent"],
+  "license": "ISC"
+}

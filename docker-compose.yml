@@ -1,0 +1,87 @@
+services:
+  crm:
+    build:
+      context: ./crm
+      dockerfile: Dockerfile
+    container_name: recovra-crm
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
+      - LIVEKIT_URL=${LIVEKIT_URL}
+      - NEXT_PUBLIC_LIVEKIT_URL=${NEXT_PUBLIC_LIVEKIT_URL:-${LIVEKIT_URL}}
+      - LIVEKIT_AGENT_NAME=${LIVEKIT_AGENT_NAME:-recovra-collection-agent}
+      - LIVEKIT_SIP_OUTBOUND_TRUNK_ID=${LIVEKIT_SIP_OUTBOUND_TRUNK_ID:-}
+      - MONGODB_URI=${MONGODB_URI}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+      - CRM_AGENT_API_KEY=${CRM_AGENT_API_KEY}
+      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-465}
+      - SMTP_SECURE=${SMTP_SECURE:-true}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
+      - SMTP_FROM=${SMTP_FROM:-}
+    networks:
+      - recovra-network
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: 1
+      net.ipv6.conf.default.disable_ipv6: 1
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  agent:
+    build:
+      context: ./voice_agent
+      dockerfile: Dockerfile
+    container_name: recovra-voice-agent
+    restart: unless-stopped
+    depends_on:
+      crm:
+        condition: service_healthy
+    environment:
+      - LIVEKIT_URL=${LIVEKIT_URL}
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
+      - LIVEKIT_AGENT_NAME=${LIVEKIT_AGENT_NAME:-recovra-collection-agent}
+      - LIVEKIT_SIP_OUTBOUND_TRUNK_ID=${LIVEKIT_SIP_OUTBOUND_TRUNK_ID:-}
+      - LIVEKIT_SIP_CALLER_NUMBER=${LIVEKIT_SIP_CALLER_NUMBER:-+19897474190}
+      - CRM_API_BASE=http://crm:3000/api
+      - CRM_AGENT_API_KEY=${CRM_AGENT_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash-lite}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_API_KEY_BACKUP=${GROQ_API_KEY_BACKUP:-}
+      - GROQ_MODEL=${GROQ_MODEL:-qwen/qwen3.8-27b}
+      - GROQ_BACKUP_MODEL=${GROQ_BACKUP_MODEL:-openai/gpt-oss-120b}
+      - SARVAM_API_KEY=${SARVAM_API_KEY:-}
+      - SARVAM_STT_MODEL=${SARVAM_STT_MODEL:-saaras:v3}
+      - SARVAM_TTS_MODEL=${SARVAM_TTS_MODEL:-bulbul:v3}
+      - SARVAM_TTS_SPEAKER=${SARVAM_TTS_SPEAKER:-kavya}
+      - CARTESIA_API_KEY=${CARTESIA_API_KEY:-}
+      - CARTESIA_TTS_MODEL=${CARTESIA_TTS_MODEL:-sonic-3}
+      - CARTESIA_TTS_VOICE=${CARTESIA_TTS_VOICE:-db6b0ed5-d5d3-463d-ae85-518a07d3c2b4}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY:-}
+      - DEEPGRAM_MODEL=${DEEPGRAM_MODEL:-nova-3}
+      - DEEPGRAM_TTS_MODEL=${DEEPGRAM_TTS_MODEL:-aura-2-asteria-en}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+
+    networks:
+      - recovra-network
+    sysctls:
+      net.ipv6.conf.all.disable_ipv6: 1
+      net.ipv6.conf.default.disable_ipv6: 1
+
+networks:
+  recovra-network:
+    driver: bridge
